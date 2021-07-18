@@ -4,7 +4,7 @@ const books=[
 {
     ISBN:"12345ONE",
     Title:"Getting started with Mern",
-    authors:[1,2,3],
+    authors:[1,2],
     language: "en",
     pubDate: "2021-07-07",
     numOfPage: 225,
@@ -44,7 +44,7 @@ const publications=[
     },
     {
         id:2,
-        name:"Chakra",
+        name:"chromeV-8",
         Books:["12345Two","12345ONE"],
     },
 ];
