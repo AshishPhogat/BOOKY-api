@@ -86,6 +86,25 @@ booky.get("/a/:author",(req,res)=>{
     return res.json({books : getSpecificBooks});
 });
 
+/*
+Route                           /book/new
+Description                     add new books
+Access                          PUBLIC
+Parameters                      NONE
+method                          POST
+
+*/
+booky.post("/book/new",(req,res)=>{
+    //requesting a new body of book
+    const {newBook}=req.body;
+
+    //adding to the database
+    database.books.push(newBook);
+
+    return res.json({books : database.books,message : "book was added !!"});
+});
+//---------------------------------------------------------------------------------------------------------------
+
 
 //authors;
 
@@ -140,6 +159,25 @@ booky.get("/author/is/:isbn",(req,res)=>{
 
     return res.json({authors : getAuthors});
 });
+
+/*
+Route                           /author/new
+Description                     add new author
+Access                          PUBLIC
+Parameters                      NONE
+method                          POST
+
+*/
+booky.post("/author/new",(req,res)=>{
+    //requesting a new author from the body
+    const {newAuthor}=req.body;
+
+    // adding a new author to the database
+    database.authors.push(newAuthor);
+
+    return res.json({authors : database.authors,message : "new author was added !!"});
+});
+//---------------------------------------------------------------------------------------------------------------
 
 
 // publications;
@@ -199,5 +237,21 @@ booky.get("/publication/is/:isbn",(req,res)=>{
     return res.json({publications : getSpecificPublications});
 });
 
+/*
+Route                           /publication/new
+Description                     add new publication
+Access                          PUBLIC
+Parameters                      NONE
+method                          POST
 
+*/
+booky.post("/publication/new",(req,res)=>{
+    // requesting a new publicaion from the body
+    const {newPublication} = req.body;
+    
+    //adding a new publication to the database
+    database.publications.push(newPublication);
+
+    return res.json({publications : database.publications,message : "new publications was added !!"});
+});
 booky.listen(3000, ()=> console.log("hey,the server is running!!"));
