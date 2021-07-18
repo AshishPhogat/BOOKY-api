@@ -135,10 +135,7 @@ method                          PUT
 */
 booky.put("/book/author/update/:isbn",(req,res)=>{
     database.books.forEach((book)=>{
-        if(book.ISBN === req.params.isbn){
-            book.authors.push(req.body.newAuthor);
-        }
-        return ;
+         book.ISBN !== req.params.isbn;
     });
 
     database.authors.forEach((author)=>{
@@ -149,6 +146,58 @@ booky.put("/book/author/update/:isbn",(req,res)=>{
     });
 
     return res.json({books : database.books , authors : database.authors,message : "new author was added"});
+});
+
+/*
+Route                           /book/delete
+Description                     deleting a book
+Access                          PUBLIC
+Parameters                      isbn
+method                          DELETE
+
+*/
+booky.delete("/book/delete/:isbn",(req,res)=>{
+    const updatedDatabase=database.books.filter((book)=>{
+        if(book.ISBN !== req.params.isbn){
+            return book;
+        }
+    });
+
+    database.books=updatedDatabase;
+    return res.json({books : database.books,message : `the book with isbn ${req.params.isbn} was deleted`});
+});
+
+/*
+Route                           /book/author/delete
+Description                     deleting an author from a book
+Access                          PUBLIC
+Parameters                      isbn
+method                          DELETE
+
+*/
+booky.delete("/book/author/delete/:isbn",(req,res)=>{
+    database.books.forEach((book)=>{
+        if(book.ISBN === req.params.isbn)
+        {
+           const updatedAuthorList=book.authors.filter((author)=>{
+              return  author !== req.body.Author;
+           });
+           book.authors=updatedAuthorList;
+           return ;
+        }
+    });
+
+    database.authors.forEach((author)=>{
+        if(author.id === req.body.Author){
+            const updatedBookList=author.Books.filter((book)=>{
+                    return book !== req.params.isbn;
+            });
+            author.Books=updatedBookList;
+        }
+        return ;
+    });
+
+    return res.json({books : database.books,authors : database.authors,message : `the author ${req.body.Author} is removed`});
 });
 
 //---------------------------------------------------------------------------------------------------------------
@@ -252,6 +301,27 @@ booky.put("/author/book/update/:id",(req,res)=>{
     });
 
     return res.json({books : database.books,authors : database.authors, message : "the author was updated"});
+});
+
+
+/*
+Route                           /author/delete
+Description                     deleting an author 
+Access                          PUBLIC
+Parameters                      id
+method                          DELETE
+
+*/
+booky.delete("/author/delete/:id",(req,res)=>{
+
+    const updatedDatabase=database.authors.filter((author)=>{
+        return author.id !== parseInt(req.params.id);
+    });
+
+    database.authors=updatedDatabase;
+
+    return res.json({authors : database.authors,message : `the authors with id ${req.params.id} was deleted`});
+
 });
 //---------------------------------------------------------------------------------------------------------------
 
@@ -380,4 +450,58 @@ booky.put("/publication/book/update/:id",(req,res)=>{
     return res.json({books : database.books,publications : database.publications,message : "the publication was updated"});
 });
 
+/*
+Route                           /publication/delete
+Description                     deleting an publication 
+Access                          PUBLIC
+Parameters                      id
+method                          DELETE
+
+*/
+booky.delete("/publication/delete/:id",(req,res)=>{
+
+    const updatedDatabase=database.publications.filter((publication)=>{
+        return publication.id !== parseInt(req.params.id);
+    });
+
+    database.publications=updatedDatabase;
+
+    return res.json({publications: database.publications,message : `the publication with id ${req.params.id} was deleted`});
+
+});
+
+/*
+Route                           /publication/book/delete
+Description                     deleting an publication 
+Access                          PUBLIC
+Parameters                      id
+method                          DELETE
+
+*/
+booky.delete("/publication/book/delete/:id",(req,res)=>{
+    database.publications.forEach((publication)=>{
+        if(publication.id === parseInt(req.params.id))
+        {
+            const updatedBookList=publication.Books.filter((book)=>{
+                if(book !== req.body.ISBN){
+                    return book;
+                }
+            });
+            publication.Books=updatedBookList;
+            return ;
+        }
+
+    database.books.forEach((book)=>{
+        if(book.ISBN === req.body.ISBN){
+            if(book.publication === parseInt(req.params.id))
+            {
+                book.publication=-1;
+            }
+            return ;
+        }
+    });
+
+        return res.json({ books : database.books,publications : database.publications,message : `book with isbn ${req.body.ISBN} was removed !!`});
+    });
+});
 booky.listen(3000, ()=> console.log("hey,the server is running!!"));

@@ -1,6 +1,6 @@
 const { json } = require("express");
 
-const books=[
+let books=[
 {
     ISBN:"12345ONE",
     Title:"Getting started with Mern",
@@ -19,11 +19,11 @@ const books=[
     pubDate: "2021-07-07",
     numOfPage: 225,
     category:["programming","tech","web-dev"],
-    publication: 1,
+    publication: 2,
 },
 ];
 
-const authors=[
+let authors=[
     {
         id:1,
         name:"Ashish",
@@ -32,11 +32,11 @@ const authors=[
     {
         id:2,
         name:"pavan",
-        Books:["12345Two"],
+        Books:["12345ONE","12345Two"],
     },
 ];
 
-const publications=[
+let publications=[
     {
         id:1,
         name:"Chakra",
