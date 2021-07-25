@@ -19,14 +19,14 @@
 // we need an API?
 
 //GET 
-// to get all the books
-// to get specific book 🔑
-// to get a list of books based on category🔑
-// to get a list of books based on author🔑
-// to get a list of books based on publication🔑
+// to get all the books🔑📌
+// to get specific book 🔑📌
+// to get a list of books based on category🔑📌
+// to get a list of books based on author🔑📌
+// to get a list of books based on publication🔑📌
 
 //POST
-//new book🔑
+//new book🔑📌
 
 //PUT 
 //update book details🔑
@@ -43,12 +43,12 @@
 //we need an API?
 
 //GET
-// to get all authors🔑
-// to get specific author based on id🔑
-// to get a list of authors based on a book🔑
+// to get all authors🔑📌
+// to get specific author based on id🔑📌
+// to get a list of authors based on a book🔑📌
 
 //POST
-// new author🔑
+// new author🔑📌
 
 //PUT
 //author deltails🔑
@@ -64,12 +64,12 @@
 //we need an API?
 
 //GET
-// to get all publications🔑
-// to get specific publication based on id🔑
-// to get a list of publications based on a book🔑
+// to get all publications🔑📌
+// to get specific publication based on id🔑📌
+// to get a list of publications based on a book🔑📌
 
 //POST
-//add new publication🔑
+//add new publication🔑📌
 
 //PUT
 //update publication details🔑
