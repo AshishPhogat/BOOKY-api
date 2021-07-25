@@ -29,8 +29,8 @@
 //new book🔑📌
 
 //PUT 
-//update book details🔑
-//update/add new author🔑
+//update book details🔑📌
+//update/add new author🔑📌
 
 //DELETE
 //a book🔑
@@ -51,7 +51,7 @@
 // new author🔑📌
 
 //PUT
-//author deltails🔑
+//author deltails🔑📌
 
 //DELETE
 //an author🔑
@@ -72,8 +72,8 @@
 //add new publication🔑📌
 
 //PUT
-//update publication details🔑
-//update/add new book to a publication🔑
+//update publication details🔑📌
+//update/add new book to a publication🔑📌
 
 //DELETE
 //delete a book from a publication🔑
