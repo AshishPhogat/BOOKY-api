@@ -12,6 +12,8 @@ const booky=express();
 //configurations
 booky.use(express.json());
 
+
+
 //Establish database connection
 mongoose.connect(
     process.env.MONGO_URL,
@@ -22,6 +24,14 @@ mongoose.connect(
         useCreateIndex: true
     }
     ).then(()=>{console.log("connection established successfully !!")});
+
+
+//Models
+const BookModels = require("./database/book");
+const AuthorModels= require("./database/author");
+const PublicationModles= require("./database/publicatoin");
+
+
 
 //books;
 
