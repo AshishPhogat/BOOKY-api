@@ -27,9 +27,9 @@ mongoose.connect(
 
 
 //Models
-const BookModels = require("./database/book");
-const AuthorModels= require("./database/author");
-const PublicationModles= require("./database/publicatoin");
+const BookModel = require("./database/book");
+const AuthorModel = require("./database/author");
+const PublicationModle = require("./database/publicatoin");
 
 
 
@@ -43,9 +43,11 @@ Parameters                      NONE
 method                          GET
 
 */
-booky.get("/",(req,res)=>{
+booky.get("/",async(req,res)=>{
+    const getallbooks=await BookModel.find();
     //hello change
-    return res.json({books : database.books});
+    console.log(getallbooks);
+    return res.json({books : getallbooks});
 });
 
 /*
@@ -56,12 +58,16 @@ Parameters                      isbn
 method                          GET
 
 */
-booky.get("/is/:isbn",(req,res)=>{
+booky.get("/is/:isbn",async(req,res)=>{
 
-    const getSpecificBook=database.books.filter((book)=>{
-       return book.ISBN === req.params.isbn;
-    });
-    if(getSpecificBook.length ===0){
+    const getSpecificBook = await BookModel.findOne({ISBN : req.params.isbn});
+
+    // const getSpecificBook=database.books.filter((book)=>{
+    //    return book.ISBN === req.params.isbn;
+    // });
+
+    //if mongodb doesn't find your data it reutrns -> null
+    if(!getSpecificBook){
         return res.json({error : `no book found for the ISBN of ${req.params.isbn}`});
     }
 
