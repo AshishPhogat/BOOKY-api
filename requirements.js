@@ -33,8 +33,8 @@
 //update/add new author🔑📌
 
 //DELETE
-//a book🔑
-//a author from a book🔑
+//a book🔑📌
+//a author from a book🔑📌
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@
 //author deltails🔑📌
 
 //DELETE
-//an author🔑
+//an author🔑📌
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -76,5 +76,5 @@
 //update/add new book to a publication🔑📌
 
 //DELETE
-//delete a book from a publication🔑
-// delete a publication🔑
+//delete a book from a publication🔑📌
+// delete a publication🔑📌

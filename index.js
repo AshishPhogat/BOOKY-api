@@ -255,15 +255,18 @@ Parameters                      isbn
 method                          DELETE
 
 */
-booky.delete("/book/delete/:isbn",(req,res)=>{
-    const updatedDatabase=database.books.filter((book)=>{
-        if(book.ISBN !== req.params.isbn){
-            return book;
-        }
+booky.delete("/book/delete/:isbn",async (req,res)=>{
+    const updateBooks = await BookModel.findOneAndDelete({
+        ISBN : req.params.isbn,
     });
+    // const updatedDatabase=database.books.filter((book)=>{
+    //     if(book.ISBN !== req.params.isbn){
+    //         return book;
+    //     }
+    // });
 
-    database.books=updatedDatabase;
-    return res.json({books : database.books,message : `the book with isbn ${req.params.isbn} was deleted`});
+    // database.books=updatedDatabase;
+    return res.json({books : updateBooks,message : `the book with isbn ${req.params.isbn} was deleted`});
 });
 
 /*
@@ -274,29 +277,56 @@ Parameters                      isbn
 method                          DELETE
 
 */
-booky.delete("/book/author/delete/:isbn",(req,res)=>{
-    database.books.forEach((book)=>{
-        if(book.ISBN === req.params.isbn)
+booky.delete("/book/author/delete/:isbn",async (req,res)=>{
+    //update the books;
+    const updateBooks = await BookModel.findOneAndUpdate(
         {
-           const updatedAuthorList=book.authors.filter((author)=>{
-              return  author !== req.body.Author;
-           });
-           book.authors=updatedAuthorList;
-           return ;
+            ISBN : req.params.isbn,
+        },
+        {
+            $pull : {
+                authors : req.body.Author,
+            },  
+        },
+        {
+            new : true,
         }
-    });
+    );
+    // database.books.forEach((book)=>{
+    //     if(book.ISBN === req.params.isbn)
+    //     {
+    //        const updatedAuthorList=book.authors.filter((author)=>{
+    //           return  author !== req.body.Author;
+    //        });
+    //        book.authors=updatedAuthorList;
+    //        return ;
+    //     }
+    // });
 
-    database.authors.forEach((author)=>{
-        if(author.id === req.body.Author){
-            const updatedBookList=author.Books.filter((book)=>{
-                    return book !== req.params.isbn;
-            });
-            author.Books=updatedBookList;
+    //updating the author details ;
+    const updateAuthors = await AuthorModel.findOneAndUpdate(
+        {
+            id : req.body.Author,
+        },
+        {
+            Books : req.params.isbn,
+        },
+        {
+            new : true,
         }
-        return ;
-    });
+    );
 
-    return res.json({books : database.books,authors : database.authors,message : `the author ${req.body.Author} is removed`});
+    // database.authors.forEach((author)=>{
+    //     if(author.id === req.body.Author){
+    //         const updatedBookList=author.Books.filter((book)=>{
+    //                 return book !== req.params.isbn;
+    //         });
+    //         author.Books=updatedBookList;
+    //     }
+    //     return ;
+    // });
+
+    return res.json({books : updateBooks,authors : updateAuthors,message : `the author ${req.body.Author} is removed`});
 });
 
 //---------------------------------------------------------------------------------------------------------------
@@ -440,15 +470,17 @@ Parameters                      id
 method                          DELETE
 
 */
-booky.delete("/author/delete/:id",(req,res)=>{
+booky.delete("/author/delete/:id",async (req,res)=>{
+    const udpateAuthors = await AuthorModel.findOneAndDelete(
+        { id : req.params.id}
+    );
+    // const updatedDatabase=database.authors.filter((author)=>{
+    //     return author.id !== parseInt(req.params.id);
+    // });
 
-    const updatedDatabase=database.authors.filter((author)=>{
-        return author.id !== parseInt(req.params.id);
-    });
+    // database.authors=updatedDatabase;
 
-    database.authors=updatedDatabase;
-
-    return res.json({authors : database.authors,message : `the authors with id ${req.params.id} was deleted`});
+    return res.json({authors : updateAuthors,message : `the authors with id ${req.params.id} was deleted`});
 
 });
 //---------------------------------------------------------------------------------------------------------------
@@ -623,15 +655,18 @@ Parameters                      id
 method                          DELETE
 
 */
-booky.delete("/publication/delete/:id",(req,res)=>{
+booky.delete("/publication/delete/:id",async (req,res)=>{
 
-    const updatedDatabase=database.publications.filter((publication)=>{
-        return publication.id !== parseInt(req.params.id);
-    });
+    const updatePublications = await PublicationModel.findOneAndDelete(
+        {id : req.params.id}
+    );
+    // const updatedDatabase=database.publications.filter((publication)=>{
+    //     return publication.id !== parseInt(req.params.id);
+    // });
 
-    database.publications=updatedDatabase;
+    // database.publications=updatedDatabase;
 
-    return res.json({publications: database.publications,message : `the publication with id ${req.params.id} was deleted`});
+    return res.json({publications: updatePublications,message : `the publication with id ${req.params.id} was deleted`});
 
 });
 
@@ -643,33 +678,59 @@ Parameters                      id
 method                          DELETE
 
 */
-booky.delete("/publication/book/delete/:id",(req,res)=>{
+booky.delete("/publication/book/delete/:id",async (req,res)=>{
     //updating the publication database
-    database.publications.forEach((publication)=>{
-        if(publication.id === parseInt(req.params.id))
+    const updatePublications = await PublicationModel.findOneAndUpdate(
         {
-            const updatedBookList=publication.Books.filter((book)=>{
-                if(book !== req.body.ISBN){
-                    return book;
-                }
-            });
-            publication.Books=updatedBookList;
-            return ;
+            id : req.params.id,
+        },
+        {
+            $pull : {
+                ISBN : req.body.ISBN,
+            },
+        },
+        {
+            new : true,
         }
+    );
+    // database.publications.forEach((publication)=>{
+    //     if(publication.id === parseInt(req.params.id))
+    //     {
+    //         const updatedBookList=publication.Books.filter((book)=>{
+    //             if(book !== req.body.ISBN){
+    //                 return book;
+    //             }
+    //         });
+    //         publication.Books=updatedBookList;
+    //         return ;
+    //     }
         //updating the book database
-    database.books.forEach((book)=>{
-        if(book.ISBN === req.body.ISBN){
-            if(book.publication === parseInt(req.params.id))
-            {
-                book.publication=-1;
+    const updateBooks = await BookModel.findOneAndUpdate(
+        {
+            ISBN : req.body.ISBN ,
+        },
+        {
+            $set : {
+                publication : -1,
             }
-            return ;
+        },
+        {
+            new : true,
         }
-    });
+    );
+    // database.books.forEach((book)=>{
+    //     if(book.ISBN === req.body.ISBN){
+    //         if(book.publication === parseInt(req.params.id))
+    //         {
+    //             book.publication=-1;
+    //         }
+    //         return ;
+    //     }
+    // });
 
-        return res.json({ books : database.books,publications : database.publications,message : `book with isbn ${req.body.ISBN} was removed !!`});
-    });
+        return res.json({ books : updateBooks,publications : updatePublications,message : `book with isbn ${req.body.ISBN} was removed !!`});
 });
+
 
 
 
