@@ -4,7 +4,7 @@
   "description": "my first node project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "booky": "npx nodemon index"
   },
   "author": "Ashish",
   "license": "ISC",
