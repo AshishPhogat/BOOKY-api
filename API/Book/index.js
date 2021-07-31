@@ -123,12 +123,18 @@ method                          POST
 */
 Router.post("/new",async(req,res)=>{
     //requesting a new body of book
-    const {newBook}=req.body;
+    try{const {newBook}=req.body;
 
     //adding to the database
-     await BookModel.create(newBook);
+        await BookModel.create(newBook);
 
-    return res.json({books : {},message : "book was added !!"});
+        return res.json({books : {},message : "book was added !!"});
+    }
+    catch(error){
+        // console.log(error);
+        // throw new Error(error);->Unhandled promise;
+        return res.json({error : error.message});
+    }
 });
 
 /*
