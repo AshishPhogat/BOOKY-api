@@ -17,9 +17,13 @@ method                          GET
 
 */
 Router.get("/",async(req,res)=>{
-    const getallbooks=await BookModel.find();
+  try{
+      const getallbooks=await BookModel.find();
     //hello change
     return res.json({books : getallbooks});
+}catch(error){
+    return res.json({error : error.message});
+}
 });
 
 /*
@@ -32,7 +36,8 @@ method                          GET
 */
 Router.get("/is/:isbn",async(req,res)=>{
 
-    const getSpecificBook = await BookModel.findOne({ISBN : req.params.isbn});
+    try{
+        const getSpecificBook = await BookModel.findOne({ISBN : req.params.isbn});
 
     // const getSpecificBook=database.books.filter((book)=>{
     //    return book.ISBN === req.params.isbn;
@@ -44,6 +49,9 @@ Router.get("/is/:isbn",async(req,res)=>{
     }
 
     return res.json({book : getSpecificBook});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 
 });
 
@@ -58,7 +66,8 @@ method                          GET
 
 Router.get("/c/:category",async (req,res)=>{
 
-    const getSpecificBooks = await BookModel.find({category : req.params.category});
+    try{
+        const getSpecificBooks = await BookModel.find({category : req.params.category});
     // const getSpecificBooks=database.books.filter((book)=>{
     //     return book.category.includes(req.params.category);
     //  });
@@ -67,6 +76,9 @@ Router.get("/c/:category",async (req,res)=>{
      }
  
      return res.json({books : getSpecificBooks});
+    }catch(error){
+        return res.json({error: error.message});
+    }
 });
 
 /*
@@ -79,7 +91,8 @@ method                          GET
 */
 Router.get("/a/:author",async (req,res)=>{
 
-    const getSpecificBooks = await BookModel.find({authors : req.params.author });
+    try{
+        const getSpecificBooks = await BookModel.find({authors : req.params.author });
     // const getSpecificBooks=database.books.filter((book)=>{
     //        return  book.authors.includes(parseInt(req.params.author));
     // });
@@ -88,6 +101,9 @@ Router.get("/a/:author",async (req,res)=>{
     }
 
     return res.json({books : getSpecificBooks});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -101,7 +117,8 @@ method                          GET
 
 Router.get("/p/:publication",async (req,res)=>{
 
-    const getSpecificBooks = await BookModel.find({publication : parseInt(req.params.publication)});
+    try{
+        const getSpecificBooks = await BookModel.find({publication : parseInt(req.params.publication)});
     // const getSpecificBooks = database.books.filter((book)=>{
     //      return   book.publication = parseInt(req.params.publication);
     // });
@@ -111,6 +128,9 @@ Router.get("/p/:publication",async (req,res)=>{
     }
 
     return res.json({books : getSpecificBooks });
+    }catch(error){
+        return res.json({error: error.message});
+    }
 });
 
 /*
@@ -146,27 +166,31 @@ method                          PUT
 
 */
 Router.put("/update/:isbn",async (req,res)=>{
-    const updateBooks = await BookModel.findOneAndUpdate(
-    {
-        ISBN : req.params.isbn,
-    },
-    {
-        Title : req.body.BookTitle,
-    },
-    {
-        new : true ,
+    try{
+        const updateBooks = await BookModel.findOneAndUpdate(
+            {
+                ISBN : req.params.isbn,
+            },
+            {
+                Title : req.body.BookTitle,
+            },
+            {
+                new : true ,
+            }
+            );
+            //foreach direclty modifies the array
+            // database.books.forEach((book)=>{
+            //     if(book.ISBN === req.params.isbn)
+            //     {
+            //         book.Title = req.body.BookTitle;
+            //         return ;
+            //     }
+            // });
+        
+            return res.json({books : updateBooks, message : "the book title was updates !!"});
+    }catch(error){
+        return res.json({error : error.message});
     }
-    );
-    //foreach direclty modifies the array
-    // database.books.forEach((book)=>{
-    //     if(book.ISBN === req.params.isbn)
-    //     {
-    //         book.Title = req.body.BookTitle;
-    //         return ;
-    //     }
-    // });
-
-    return res.json({books : updateBooks, message : "the book title was updates !!"});
 });
 
 /*
@@ -178,7 +202,8 @@ method                          PUT
 
 */
 Router.put("/author/update/:isbn",async (req,res)=>{
-    //updating the books database;
+    try{
+        //updating the books database;
     const updateBooks = await BookModel.findOneAndUpdate(
         {
             ISBN : req.params.isbn,
@@ -221,6 +246,9 @@ Router.put("/author/update/:isbn",async (req,res)=>{
     // });
 
     return res.json({books : updateBooks , authors : updateAuthors,message : "new author was added"});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -232,17 +260,21 @@ method                          DELETE
 
 */
 Router.delete("/delete/:isbn",async (req,res)=>{
-    const updateBooks = await BookModel.findOneAndDelete({
-        ISBN : req.params.isbn,
-    });
-    // const updatedDatabase=database.books.filter((book)=>{
-    //     if(book.ISBN !== req.params.isbn){
-    //         return book;
-    //     }
-    // });
-
-    // database.books=updatedDatabase;
-    return res.json({books : updateBooks,message : `the book with isbn ${req.params.isbn} was deleted`});
+    try{
+        const updateBooks = await BookModel.findOneAndDelete({
+            ISBN : req.params.isbn,
+        });
+        // const updatedDatabase=database.books.filter((book)=>{
+        //     if(book.ISBN !== req.params.isbn){
+        //         return book;
+        //     }
+        // });
+    
+        // database.books=updatedDatabase;
+        return res.json({books : updateBooks,message : `the book with isbn ${req.params.isbn} was deleted`});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -254,7 +286,8 @@ method                          DELETE
 
 */
 Router.delete("/author/delete/:isbn",async (req,res)=>{
-    //update the books;
+    try{
+        //update the books;
     const updateBooks = await BookModel.findOneAndUpdate(
         {
             ISBN : req.params.isbn,
@@ -303,6 +336,9 @@ Router.delete("/author/delete/:isbn",async (req,res)=>{
     // });
 
     return res.json({books : updateBooks,authors : updateAuthors,message : `the author ${req.body.Author} is removed`});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 

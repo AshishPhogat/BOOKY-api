@@ -19,9 +19,13 @@ method                          GET
 
 */
 Router.get("/",async (req,res)=>{
-    const getAllAuthors = await AuthorModel.find();
+    try{
+        const getAllAuthors = await AuthorModel.find();
     //hello change
     return res.json({authors : getAllAuthors});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -34,15 +38,20 @@ method                          GET
 */
 
 Router.get("/:id",async (req,res)=>{
-    const getSpecificAuthors = await AuthorModel.findOne({id : parseInt(req.params.id)});
-    // const getSpecificAuthor=database.authors.filter((author)=>{
-    //         return author.id === parseInt(req.params.id);
-    // });
-    if(! getSpecificAuthors){
-        return res.json({error : `no author found with the id of ${req.params.id}`});
+   
+    try{
+        const getSpecificAuthors = await AuthorModel.findOne({id : parseInt(req.params.id)});
+        // const getSpecificAuthor=database.authors.filter((author)=>{
+        //         return author.id === parseInt(req.params.id);
+        // });
+        if(! getSpecificAuthors){
+            return res.json({error : `no author found with the id of ${req.params.id}`});
+        }
+    
+        return res.json({author : getSpecificAuthors});
+    }catch(error){
+        return res.json({error : error.message});
     }
-
-    return res.json({author : getSpecificAuthors});
 });
 
 /*
@@ -54,7 +63,9 @@ method                          GET
 
 */
 Router.get("/is/:isbn",async (req,res)=>{
-    const getAuthors = await AuthorModel.find({Books: req.params.isbn});
+    
+    try{
+        const getAuthors = await AuthorModel.find({Books: req.params.isbn});
     // const getAuthors =database.authors.filter((author)=>{
     //     return author.Books.includes(req.params.isbn);
     // });
@@ -63,6 +74,9 @@ Router.get("/is/:isbn",async (req,res)=>{
     }
 
     return res.json({authors : getAuthors});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -74,13 +88,18 @@ method                          POST
 
 */
 Router.post("/new",async (req,res)=>{
-    //requesting a new author from the body
+    
+    try{
+        //requesting a new author from the body
     const {newAuthor}=req.body;
 
     // adding a new author to the database
     await AuthorModel.create(newAuthor);
 
     return res.json({authors : {},message : "new author was added !!"});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -92,7 +111,9 @@ method                          PUT
 
 */
 Router.put("/book/update/:id",async (req,res)=>{
-    //updating the author
+    
+    try{
+        //updating the author
     const updateAuthors = await AuthorModel.findOneAndUpdate(
         {
             id : req.params.id,
@@ -135,6 +156,9 @@ Router.put("/book/update/:id",async (req,res)=>{
     // });
 
     return res.json({books : updateBooks,authors : updateAuthors, message : "the author was updated"});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 
@@ -147,16 +171,20 @@ method                          DELETE
 
 */
 Router.delete("/delete/:id",async (req,res)=>{
-    const udpateAuthors = await AuthorModel.findOneAndDelete(
-        { id : req.params.id}
-    );
-    // const updatedDatabase=database.authors.filter((author)=>{
-    //     return author.id !== parseInt(req.params.id);
-    // });
-
-    // database.authors=updatedDatabase;
-
-    return res.json({authors : updateAuthors,message : `the authors with id ${req.params.id} was deleted`});
+    try{
+        const udpateAuthors = await AuthorModel.findOneAndDelete(
+            { id : req.params.id}
+        );
+        // const updatedDatabase=database.authors.filter((author)=>{
+        //     return author.id !== parseInt(req.params.id);
+        // });
+    
+        // database.authors=updatedDatabase;
+    
+        return res.json({authors : updateAuthors,message : `the authors with id ${req.params.id} was deleted`});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 
 });
 

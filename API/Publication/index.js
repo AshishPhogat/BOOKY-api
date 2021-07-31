@@ -18,9 +18,13 @@ method                          GET
 */
 Router.get("/",async (req,res)=>{
 
-    const getPublications = await PublicationModel.find();
+    try{
+        const getPublications = await PublicationModel.find();
     // const getPublications=database.publications;
     return res.json({publications : getPublications});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -33,7 +37,8 @@ method                          GET
 */
 Router.get("/:id",async (req,res)=>{
 
-    const getSpecificPublication = await PublicationModel.findOne({id : req.params.id});
+    try{
+        const getSpecificPublication = await PublicationModel.findOne({id : req.params.id});
     // getSpecificPublication=database.publications.filter((publication)=>{
     //     return publication.id === parseInt(req.params.id);
     // });
@@ -43,6 +48,9 @@ Router.get("/:id",async (req,res)=>{
     }
 
     return res.json({ publication : getSpecificPublication});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -54,7 +62,9 @@ method                          GET
 
 */
 Router.get("/is/:isbn",async (req,res)=>{
-    const getSpecificPublications = await PublicationModel.find({Books : req.params.isbn});
+    
+    try{
+        const getSpecificPublications = await PublicationModel.find({Books : req.params.isbn});
     // const getSpecificPublications =database.publications.filter((publication)=>{
     //     return publication.Books.includes(req.params.isbn);
     // });
@@ -64,6 +74,9 @@ Router.get("/is/:isbn",async (req,res)=>{
     }
 
     return res.json({publications : getSpecificPublications});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -75,7 +88,9 @@ method                          POST
 
 */
 Router.post("/new",async (req,res)=>{
-    // requesting a new publicaion from the body
+    
+    try{
+        // requesting a new publicaion from the body
     const {newPublication} = req.body;
     
     //adding a new publication to the database
@@ -83,6 +98,9 @@ Router.post("/new",async (req,res)=>{
     // database.publications.push(newPublication);
 
     return res.json({publications : {},message : "new publications was added !!"});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -94,7 +112,9 @@ method                          PUT
 
 */
 Router.put("/update/:id",async (req,res)=>{
-    //updating the name in publication
+   
+    try{
+         //updating the name in publication
     const updatePublications = await PublicationModel.findOneAndUpdate(
         {
             id : req.params.id,
@@ -114,6 +134,9 @@ Router.put("/update/:id",async (req,res)=>{
     // });
 
     return res.json({publications : updatePublications,message : "the name of the publication was upadted"});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 /*
@@ -126,8 +149,9 @@ method                          PUT
 */
 
 Router.put("/book/update/:id",async (req,res)=>{
-    //updating the publication 
-    const updatePublications = await PublicationModel.findOneAndUpdate(
+   try{
+     //updating the publication 
+     const updatePublications = await PublicationModel.findOneAndUpdate(
         {
             id : parseInt(req.params.id),
         },
@@ -165,6 +189,9 @@ Router.put("/book/update/:id",async (req,res)=>{
     // });
 
     return res.json({books : updateBooks,publications : updatePublications,message : "the publication was updated"});
+   }catch(error){
+       return res.json({error : error.message});
+   }
 });
 
 /*
@@ -177,16 +204,20 @@ method                          DELETE
 */
 Router.delete("/delete/:id",async (req,res)=>{
 
-    const updatePublications = await PublicationModel.findOneAndDelete(
-        {id : req.params.id}
-    );
-    // const updatedDatabase=database.publications.filter((publication)=>{
-    //     return publication.id !== parseInt(req.params.id);
-    // });
-
-    // database.publications=updatedDatabase;
-
-    return res.json({publications: updatePublications,message : `the publication with id ${req.params.id} was deleted`});
+    try{
+        const updatePublications = await PublicationModel.findOneAndDelete(
+            {id : req.params.id}
+        );
+        // const updatedDatabase=database.publications.filter((publication)=>{
+        //     return publication.id !== parseInt(req.params.id);
+        // });
+    
+        // database.publications=updatedDatabase;
+    
+        return res.json({publications: updatePublications,message : `the publication with id ${req.params.id} was deleted`});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 
 });
 
@@ -199,7 +230,9 @@ method                          DELETE
 
 */
 Router.delete("/book/delete/:id",async (req,res)=>{
-    //updating the publication database
+    
+    try{
+        //updating the publication database
     const updatePublications = await PublicationModel.findOneAndUpdate(
         {
             id : req.params.id,
@@ -249,6 +282,9 @@ Router.delete("/book/delete/:id",async (req,res)=>{
     // });
 
         return res.json({ books : updateBooks,publications : updatePublications,message : `book with isbn ${req.body.ISBN} was removed !!`});
+    }catch(error){
+        return res.json({error : error.message});
+    }
 });
 
 module.exports = Router ;
